@@ -47,7 +47,7 @@ public class PromTestFramework {
 				}
             return failedTest;
         }
-	public Object main(CommandLineArgumentList commandlineArguments) throws Throwable {
+	public void main(CommandLineArgumentList commandlineArguments) throws Throwable {
 		System.out.println("Entering ProM Test Framework");
 		
 		// from where do we read the tests
@@ -69,9 +69,10 @@ public class PromTestFramework {
 		List<PromTestException.WrappedException> errorTest = new LinkedList<PromTestException.WrappedException>();
 		
 		System.out.println("Running "+testMethods.size()+" tests:");
+                try {
 		for (Method test : testMethods) {
 			
-			try {
+			
 				System.out.println(test);
 				
 				// run test and get test result
@@ -86,18 +87,19 @@ public class PromTestFramework {
 				// compare result and expected
                                 failedTest = mP1(result, expected, failedTest, test);
 				
-			} catch (Throwable e) {
+			
+		}
+                } catch (Throwable e) {
 				// test crashed, store exception for reporting
 				errorTest.add(
 						new PromTestException.WrappedException(test, "errore"));
 			}
-		}
 		
 		if (!failedTest.isEmpty() || ! errorTest.isEmpty()) {
 			throw new PromTestException(failedTest, errorTest);
 		}
 		
-    	return null;
+    	return;
 	}
 	
 	private void getAllTestMethods(String lookUpDir) throws Exception {
